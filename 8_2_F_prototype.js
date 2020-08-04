@@ -10,7 +10,7 @@
 //The only thing that worked reliably was a "prototype" property of the constructor function,
 //described in this chapter. So there are many scripts that still use it.
 
-//Please note that F.prototype here means a regular property named "prototype" on F.
+//Please note that Function .prototype here means a regular property named "prototype" on F.
 //It sounds something similar to the term “prototype”,
 //but here we really mean a regular property with this name.
 
@@ -57,7 +57,7 @@ Rabbit.prototype = { constructor: Rabbit };
 //We can check it:
 function Rabbit1() {}
 // by default:
-// Rabbit.prototype = { constructor: Rabbit }
+// Rabbit1.prototype = { constructor: Rabbit1 }
 
 console.log( Rabbit1.prototype.constructor == Rabbit1 ); // true
 
@@ -72,8 +72,10 @@ function Rabbit2() {}
 // Rabbit.prototype = { constructor: Rabbit }
 
 let rabbit2 = new Rabbit2(); // inherits from {constructor: Rabbit}
-
+// rabbit2 = Rabbit2().constructor
+// rabbit2 = Rabbit2.prototype
 console.log(rabbit2.constructor == Rabbit2); // true (from prototype)
+//console.log(Rabbit2.prototype.constructor == Rabbit2)
 
 //can use constructor property to create a new object using the same constructor as the existing one.
 
@@ -99,12 +101,13 @@ let rabbit4 = new rabbit3.constructor("Black Rabbit");
 //then there will be no "constructor" in it.
 
 function Rabbit5() {}
+
 Rabbit5.prototype = {
   jumps: true
 };
 
 let rabbit5 = new Rabbit5();
-console.log(rabbit5.constructor === Rabbit5); // false
+console.log(rabbit5.constructor === Rabbit5); // false because prototype content jumps:true unless empty
 console.log(rabbit5.constructor ); //[Function: Object]
 
 //So, to keep the right "constructor" we can choose to add/remove properties to
@@ -121,7 +124,9 @@ Rabbit6.prototype.jumps = true
 Rabbit6.prototype = {
   jumps: true,
   constructor: Rabbit6
-};
+}; // manually set Rabbit6.prototype.constructor = Rabbit6
+
+console.log(Rabbit6.constructor == Rabbit6); //true
 
 // now constructor is also correct, because we added it
 
